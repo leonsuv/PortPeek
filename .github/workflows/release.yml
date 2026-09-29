@@ -1,0 +1,26 @@
+name: Release
+on:
+  push:
+    tags: ['v*']
+permissions:
+  contents: write
+jobs:
+  release:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and check
+        run: VERSION="${GITHUB_REF_NAME#v}" ./build.sh
+      - name: Check real TCP listener
+        run: python3 scripts/live-check.py
+      - name: Package
+        run: |
+          ditto -c -k --sequesterRsrc --keepParent dist/PortPeek.app "PortPeek-${GITHUB_REF_NAME#v}-macos.zip"
+          shasum -a 256 "PortPeek-${GITHUB_REF_NAME#v}-macos.zip" > SHA256SUMS.txt
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            PortPeek-*-macos.zip
+            SHA256SUMS.txt
+          body_path: RELEASE.md
+          make_latest: true
