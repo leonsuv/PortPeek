@@ -2,7 +2,7 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 NAME="PortPeek"
-VERSION="${VERSION:-1.0.0}"
+VERSION="${VERSION:-1.1.0}"
 APP="dist/$NAME.app"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 swiftc -target arm64-apple-macos13.0 -O Sources/*.swift -o "$APP/Contents/MacOS/$NAME"

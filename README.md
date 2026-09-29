@@ -2,26 +2,40 @@
 
 **Know what’s listening.**
 
-A native Mac utility that connects local TCP listening ports to their owning processes. Find the development server occupying a port, inspect its bind address, and copy a clean snapshot.
+A native Mac utility that connects local TCP listeners and bound UDP sockets to their owning processes. Find the development server occupying a port, inspect its bind address, and copy a clean snapshot.
 
 ## What it does
 
-- TCP port, process name, PID, listening address and bind scope in one table.
-- Search by port, process, PID or address.
-- Filter loopback and all-interface listeners.
-- Automatic refresh every five seconds while the window is visible, plus ⌘R.
-- IPv4 and IPv6 address handling.
-- Copy a selected address or the visible list as JSON.
-- Open Activity Monitor for further inspection.
+- TCP listeners and unconnected bound UDP sockets, including IPv4/IPv6 addresses.
+- Filter protocol, bind scope, process, PID, address or custom port label.
+- Pin frequently used ports and label services such as an API or local database.
+- Capture a persistent baseline; see opened/closed sockets and export the change report.
+- Choose five-, fifteen- or thirty-second refresh, or freeze with manual mode.
+- Inspect a selected process command, user and elapsed time through the system `ps` tool.
+- Copy an address or Terminal `lsof` command; open Activity Monitor.
+- Export filtered CSV/JSON snapshots or copy JSON to the clipboard.
+- Read-only CLI socket inventory with protocol, port and scope filters.
+- System commands time out after eight seconds; no administrator access is requested.
 
 ## Use it
 
-1. Open the app to read local TCP listeners.
+1. Open the app to read local TCP listeners and bound UDP sockets.
 2. Search for a port such as `3000`, or choose a scope filter.
 3. Select a row to inspect the process and address.
 4. Copy the address or filtered JSON when needed.
 
-PortPeek uses the system `/usr/sbin/lsof` without administrator privileges. Visibility depends on your current permissions, and process names are those reported by lsof. It lists TCP listeners, not UDP sockets or established connections. An all-interface bind is not proof of internet reachability: routing and firewall rules also matter. It does not stop processes or change network settings. The three counters describe the full scan; JSON exports the filtered rows.
+PortPeek uses the system `/usr/sbin/lsof` without administrator privileges. Visibility depends on your current permissions, and process names are those reported by lsof. It lists TCP listeners and unconnected bound UDP sockets, excluding established TCP connections and connected UDP endpoints. An all-interface bind is not proof of internet reachability: routing and firewall rules also matter. It does not stop processes or change network settings. The three counters describe the full scan; snapshot CSV/JSON exports the filtered rows. Baselines and custom port labels are stored in local UserDefaults.
+
+## Automation and integrations
+
+```sh
+tool="/Applications/PortPeek.app/Contents/MacOS/PortPeek"
+"$tool" list --protocol=All --format=json
+"$tool" list --protocol=TCP --port=3000 --scope=loopback
+"$tool" list --protocol=UDP --format=csv > bound-udp.csv
+```
+
+The CLI sends system warnings to stderr and data to stdout. Shell redirection follows normal shell overwrite behavior. Baseline changes compare observed sockets, including PID, protocol, address and process. Short-lived sockets between refreshes can be missed; an opened/closed count is not a continuous traffic history. Pins and labels are keyed by port number across protocols. The baseline records all protocols regardless of the active table filter.
 
 ## Privacy
 
@@ -70,13 +84,19 @@ Parser checks cover process grouping, duplicate entries, IPv6 addresses, scopes,
 
 Run the live-listener check with `python3 scripts/live-check.py`.
 
+Run the CLI integration check (uses temporary fixtures only):
+
+```sh
+python3 scripts/check-cli.py
+```
+
 To reproduce the example screenshots:
 
 ```sh
 ./scripts/screenshots.sh
 ```
 
-Demo mode does not write normal app settings or perform real rename operations. Screenshots are captured from AppKit’s window view after layout. The icon is drawn from the project’s own vector shapes; regenerate it with `./tools/generate-icon.sh`.
+Demo mode does not collect real process information or write normal app settings. Screenshots are captured from AppKit’s window view after layout. The icon is drawn from the project’s own vector shapes; regenerate it with `./tools/generate-icon.sh`.
 
 ## Releases
 

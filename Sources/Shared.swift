@@ -98,7 +98,7 @@ class ProductAppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         window.minSize = NSSize(width: minWidth, height: minHeight); window.isReleasedWhenClosed = false
         if snapshotPath == nil { window.setFrameAutosaveName("MainWindow") }
     }
-    @objc func about() { NSApp.orderFrontStandardAboutPanel(options: [.applicationName: Product.name, .applicationVersion: "1.0.0", .credits: NSAttributedString(string: "A native Mac utility by leonsuv.\nMIT License · Local processing.")]) }
+    @objc func about() { NSApp.orderFrontStandardAboutPanel(options: [.applicationName: Product.name, .applicationVersion: Bundle.main.object(forInfoDictionaryKey:"CFBundleShortVersionString") as? String ?? "1.1.0", .credits: NSAttributedString(string: "A native Mac utility by leonsuv.\nMIT License · Local processing.")]) }
     @objc func theme(_ sender: NSMenuItem) { applyTheme(sender.title); if !isDemo { UserDefaults.standard.set(sender.title, forKey: "appearance") } }
     func applyTheme(_ mode: String) { NSApp.appearance = mode == "System" ? nil : NSAppearance(named: mode == "Dark" ? .darkAqua : .aqua) }
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool { true }

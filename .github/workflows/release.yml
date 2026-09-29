@@ -13,6 +13,8 @@ jobs:
         run: VERSION="${GITHUB_REF_NAME#v}" ./build.sh
       - name: Check real TCP listener
         run: python3 scripts/live-check.py
+      - name: CLI integration checks
+        run: python3 scripts/check-cli.py
       - name: Package
         run: |
           ditto -c -k --sequesterRsrc --keepParent dist/PortPeek.app "PortPeek-${GITHUB_REF_NAME#v}-macos.zip"

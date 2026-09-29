@@ -1,17 +1,14 @@
-# PortPeek 1.0.0
+# PortPeek 1.1.0
 
-A native Mac utility that connects local TCP listening ports to their owning processes. Find the development server occupying a port, inspect its bind address, and copy a clean snapshot.
+- TCP listeners and unconnected bound UDP sockets, including IPv4/IPv6 addresses.
+- Filter protocol, bind scope, process, PID, address or custom port label.
+- Pin frequently used ports and label services such as an API or local database.
+- Capture a persistent baseline; see opened/closed sockets and export the change report.
+- Choose five-, fifteen- or thirty-second refresh, or freeze with manual mode.
+- Inspect a selected process command, user and elapsed time through the system `ps` tool.
+- Copy an address or Terminal `lsof` command; open Activity Monitor.
+- Export filtered CSV/JSON snapshots or copy JSON to the clipboard.
+- Read-only CLI socket inventory with protocol, port and scope filters.
+- System commands time out after eight seconds; no administrator access is requested.
 
-- TCP port, process name, PID, listening address and bind scope in one table.
-- Search by port, process, PID or address.
-- Filter loopback and all-interface listeners.
-- Automatic refresh every five seconds while the window is visible, plus ⌘R.
-- IPv4 and IPv6 address handling.
-- Copy a selected address or the visible list as JSON.
-- Open Activity Monitor for further inspection.
-
-Includes native Light/Dark/System appearance, a custom app icon, documentation and example screenshots.
-
-**Download:** unzip `PortPeek-1.0.0-macos.zip` and move `PortPeek.app` to Applications. Apple Silicon only; deployment target macOS 13+, tested locally on macOS 27. Ad-hoc signed, not notarized; macOS may require approval in Privacy & Security. `SHA256SUMS.txt` verifies the ZIP.
-
-Functional tests and signature validation run during the release build.
+Apple Silicon · macOS 13+ deployment target. Locally tested on macOS 27. Download the ZIP and verify it against SHA256SUMS.txt. Builds are ad-hoc signed and are not Developer ID signed or notarized. See the README for workflows, CLI examples, limits and first-launch instructions.

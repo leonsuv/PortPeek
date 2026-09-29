@@ -10,6 +10,7 @@ if CommandLine.arguments.contains("--self-test") {
     catch { fputs("FAIL: \(error)\n", stderr); exit(1) }
     exit(0)
 }
+if ProductCLI.handle() { exit(0) }
 let application = NSApplication.shared
 application.setActivationPolicy(.regular)
 let delegate = AppDelegate()
